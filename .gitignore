@@ -1,0 +1,31 @@
+# Azure and deployment
+.azure/
+*.log
+
+# Environment files with secrets
+.env
+.env.local
+*.secrets
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temp files
+*.tmp
+*.temp
+
+# Downloaded/extracted logs (can be regenerated)
+backend-logs.zip
