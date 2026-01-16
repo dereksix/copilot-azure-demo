@@ -91,21 +91,47 @@ This project demonstrates how **GitHub Copilot in VS Code's terminal** transform
 
 ### Prerequisites
 
-- Azure CLI installed and logged in (`az login`)
+- **Azure Developer CLI** (`azd`) installed: https://aka.ms/azd-install
+- **Azure CLI** installed and logged in (`az login`)
 - VS Code with GitHub Copilot extension
-- PowerShell or Bash terminal
+- PowerShell 7+ or Bash terminal
 - Shell integration enabled (already configured)
 
-### Deploy
+### Deploy with Azure Developer CLI (Recommended)
 
 ```powershell
-# Run the deployment script
+# Set required Entra ID admin for SQL Server
+$adminUpn = "your-admin@yourtenant.onmicrosoft.com"  # Your Entra ID UPN
+$adminObjectId = az ad user show --id $adminUpn --query id -o tsv
+
+# Provision infrastructure using Bicep
+azd provision --parameter sqlAdminPrincipalId=$adminObjectId --parameter sqlAdminLogin=$adminUpn
+```
+
+**What `azd provision` does:**
+1. Validates Bicep templates in `infra/`
+2. Creates/updates Azure resources: App Service Plan, Web Apps, SQL Server (Azure AD auth), Application Insights, Storage Account, Managed Identity
+3. Populates outputs (URLs, keys, database FQDN)
+4. Runs `scripts/azd-post-provision.ps1` to generate `env-config.txt` for backwards compatibility
+
+**Optional: Deploy application code**
+```powershell
+azd deploy
+```
+
+### Deploy with Legacy Script (Deprecated)
+
+```powershell
+# Old method (still supported for backwards compatibility)
 .\deploy.ps1
 ```
 
 ### Generate Issues for Demo
 
 ```powershell
+# First, ensure env-config.txt is populated from azd outputs
+# (azd post-provision automatically generates this)
+
 # Interactive menu to simulate issues
 .\simulate-issues.ps1
 
@@ -120,7 +146,7 @@ This project demonstrates how **GitHub Copilot in VS Code's terminal** transform
 ### Generate Load/Traffic
 
 ```powershell
-# Generate traffic and activity
+# Generate traffic and activity (populates Application Insights)
 .\generate-load.ps1 -Scenario all          # All scenarios
 .\generate-load.ps1 -Scenario traffic      # HTTP traffic only
 .\generate-load.ps1 -Scenario errors       # Error requests only
@@ -130,7 +156,10 @@ This project demonstrates how **GitHub Copilot in VS Code's terminal** transform
 ### Cleanup
 
 ```powershell
-# Delete all resources when done
+# Option 1: Use azd (removes all azd-provisioned resources)
+azd down
+
+# Option 2: Use Azure CLI (delete resource group)
 az group delete --name rg-copilot-demo --yes --no-wait
 ```
 
