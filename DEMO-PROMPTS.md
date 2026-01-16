@@ -105,7 +105,7 @@ Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | summarize count() by cloud_RoleName, resultCode | order by count_ desc" -o json 2>&1
 
-if ($LASTEXITCODE -ne 0) {
+if ($LASTEXITCODE -ne 0 -or $result -notmatch '^\s*\{') {
     Write-Host "⚠️  Query failed. Ensure Application Insights has data. Try running: .\generate-load.ps1 -Scenario all" -ForegroundColor Yellow
 } else {
     $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host
@@ -125,7 +125,7 @@ Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | where resultCode == '404' | project timestamp, url, duration | order by timestamp desc | take 10" -o json 2>&1
 
-if ($LASTEXITCODE -ne 0) {
+if ($LASTEXITCODE -ne 0 -or $result -notmatch '^\s*\{') {
     Write-Host "⚠️  Query failed. Ensure Application Insights has data. Try running: .\simulate-issues.ps1 -Issue http-errors" -ForegroundColor Yellow
 } else {
     $parsedResult = $result | ConvertFrom-Json
@@ -150,7 +150,7 @@ Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | summarize avgDuration=avg(duration), count=count() by cloud_RoleName | order by avgDuration desc" -o json 2>&1
 
-if ($LASTEXITCODE -ne 0) {
+if ($LASTEXITCODE -ne 0 -or $result -notmatch '^\s*\{') {
     Write-Host "⚠️  Query failed. Ensure Application Insights has data. Try running: .\generate-load.ps1 -Scenario all" -ForegroundColor Yellow
 } else {
     $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host
@@ -281,11 +281,19 @@ az webapp log tail --name $BACKEND_APP -g $RESOURCE_GROUP
 
 # App Insights - errors (with error handling)
 $result = az monitor app-insights query --app $APP_INSIGHTS -g $RESOURCE_GROUP --analytics-query "requests | where resultCode != '200' | take 10" -o json 2>&1
-if ($LASTEXITCODE -ne 0) { Write-Host "⚠️  Query failed. Check if data exists." -ForegroundColor Yellow } else { $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host }
+if ($LASTEXITCODE -ne 0 -or $result -notmatch '^\s*\{') {
+    Write-Host "⚠️  Query failed. Check if data exists." -ForegroundColor Yellow
+} else {
+    $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host
+}
 
 # App Insights - performance (with error handling)
 $result = az monitor app-insights query --app $APP_INSIGHTS -g $RESOURCE_GROUP --analytics-query "requests | summarize avg(duration) by cloud_RoleName" -o json 2>&1
-if ($LASTEXITCODE -ne 0) { Write-Host "⚠️  Query failed. Check if data exists." -ForegroundColor Yellow } else { $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host }
+if ($LASTEXITCODE -ne 0 -or $result -notmatch '^\s*\{') {
+    Write-Host "⚠️  Query failed. Check if data exists." -ForegroundColor Yellow
+} else {
+    $result | ConvertFrom-Json | ConvertTo-Json -Depth 10 | Write-Host
+}
 
 # SQL metrics
 az monitor metrics list --resource "/subscriptions/$(az account show --query id -o tsv)/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$SQL_DATABASE" --metric "dtu_consumption_percent" -o table
