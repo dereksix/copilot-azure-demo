@@ -7,7 +7,9 @@
 param(
     [string]$Scenario = "all",
     [int]$Duration = 60,
-    [int]$Concurrency = 5
+    [int]$Concurrency = 5,
+    [switch]$Loop,
+    [int]$LoopDelay = 10
 )
 
 $FRONTEND_URL = "https://app-frontend-10084.azurewebsites.net"
@@ -30,7 +32,13 @@ Write-Host "  5. logs       - Generate application logs"
 Write-Host "  6. all        - Run all scenarios"
 Write-Host ""
 Write-Host "Usage: .\generate-load.ps1 -Scenario <name> -Duration <seconds>" -ForegroundColor Gray
+Write-Host "       .\generate-load.ps1 -Scenario all -Loop              (run indefinitely)" -ForegroundColor Gray
+Write-Host "       .\generate-load.ps1 -Scenario traffic -Loop -LoopDelay 5" -ForegroundColor Gray
 Write-Host ""
+if ($Loop) {
+    Write-Host "[LOOP MODE] Press Ctrl+C to stop" -ForegroundColor Magenta
+    Write-Host ""
+}
 
 function Generate-Traffic {
     param([int]$Seconds = 30, [int]$Concurrent = 5)
@@ -210,39 +218,63 @@ function Generate-Logs {
 }
 
 # Main execution
-Write-Host "Starting scenario: $Scenario" -ForegroundColor Cyan
-Write-Host ""
+function Run-Scenario {
+    Write-Host "Starting scenario: $Scenario" -ForegroundColor Cyan
+    Write-Host ""
 
-switch ($Scenario.ToLower()) {
-    "traffic" { Generate-Traffic -Seconds $Duration -Concurrent $Concurrency }
-    "errors" { Generate-Errors -Count 20 }
-    "slow" { Generate-SlowRequests -Count 10 }
-    "sql" { Generate-SQLActivity }
-    "logs" { Generate-Logs -Seconds $Duration }
-    "all" {
-        Generate-Traffic -Seconds 15 -Concurrent 3
-        Write-Host ""
-        Generate-Errors -Count 15
-        Write-Host ""
-        Generate-SlowRequests -Count 5
-        Write-Host ""
-        Generate-Logs -Seconds 15
-        Write-Host ""
-        Generate-SQLActivity
-    }
-    default {
-        Write-Host "Unknown scenario: $Scenario" -ForegroundColor Red
-        Write-Host "Valid scenarios: traffic, errors, slow, sql, logs, all" -ForegroundColor Yellow
+    switch ($Scenario.ToLower()) {
+        "traffic" { Generate-Traffic -Seconds $Duration -Concurrent $Concurrency }
+        "errors" { Generate-Errors -Count 20 }
+        "slow" { Generate-SlowRequests -Count 10 }
+        "sql" { Generate-SQLActivity }
+        "logs" { Generate-Logs -Seconds $Duration }
+        "all" {
+            Generate-Traffic -Seconds 15 -Concurrent 3
+            Write-Host ""
+            Generate-Errors -Count 15
+            Write-Host ""
+            Generate-SlowRequests -Count 5
+            Write-Host ""
+            Generate-Logs -Seconds 15
+            Write-Host ""
+            Generate-SQLActivity
+        }
+        default {
+            Write-Host "Unknown scenario: $Scenario" -ForegroundColor Red
+            Write-Host "Valid scenarios: traffic, errors, slow, sql, logs, all" -ForegroundColor Yellow
+        }
     }
 }
 
+# Run once or loop indefinitely
+$iteration = 0
+do {
+    $iteration++
+    if ($Loop) {
+        Write-Host ""
+        Write-Host "============================================================" -ForegroundColor Magenta
+        Write-Host "  ITERATION #$iteration - $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Magenta
+        Write-Host "============================================================" -ForegroundColor Magenta
+    }
+    
+    Run-Scenario
+    
+    if ($Loop) {
+        Write-Host ""
+        Write-Host "[LOOP] Waiting $LoopDelay seconds before next iteration... (Ctrl+C to stop)" -ForegroundColor Magenta
+        Start-Sleep -Seconds $LoopDelay
+    }
+} while ($Loop)
+
 Write-Host ""
-Write-Host "============================================================" -ForegroundColor Green
-Write-Host "  Load generation complete!" -ForegroundColor Green
-Write-Host "============================================================" -ForegroundColor Green
-Write-Host ""
-Write-Host "Now use Copilot to investigate:" -ForegroundColor Cyan
-Write-Host '  @terminal "Show me errors from my web app in the last 10 minutes"' -ForegroundColor White
-Write-Host '  @terminal "Query App Insights for failed requests"' -ForegroundColor White
-Write-Host '  @terminal "Stream logs from my backend app"' -ForegroundColor White
-Write-Host ""
+if (-not $Loop) {
+    Write-Host "============================================================" -ForegroundColor Green
+    Write-Host "  Load generation complete!" -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Now use Copilot to investigate:" -ForegroundColor Cyan
+    Write-Host '  @terminal "Show me errors from my web app in the last 10 minutes"' -ForegroundColor White
+    Write-Host '  @terminal "Query App Insights for failed requests"' -ForegroundColor White
+    Write-Host '  @terminal "Stream logs from my backend app"' -ForegroundColor White
+    Write-Host ""
+}

@@ -41,8 +41,8 @@ az sql server show --name sql-copilot-demo-10084 --resource-group rg-copilot-dem
 
 ### COPILOT PROMPTS:
 - "Show me all resources in my Azure resource group rg-copilot-demo"
-- "Check if my web apps are running"
-- "Is my SQL database online?"
+- "Check if my Azure App Service web apps are running in rg-copilot-demo"
+- "Is my Azure SQL database online in rg-copilot-demo?"
 
 ---
 
@@ -71,9 +71,9 @@ az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copi
 *Shows: Request counts by status code*
 
 ### COPILOT PROMPTS:
-- "Stream live logs from my frontend app"
-- "Show me HTTP errors from my web app"
-- "What's the average response time?"
+- "Stream live logs from my Azure App Service app-frontend-10084"
+- "Show me HTTP errors from my Azure web app in rg-copilot-demo"
+- "What's the average response time for my Azure App Service?"
 
 ---
 
@@ -107,9 +107,9 @@ az webapp config appsettings list --name app-backend-10084 --resource-group rg-c
 *Shows: All configuration including LOG_LEVEL=DEBUG, VERSION=2.1.0*
 
 ### COPILOT PROMPTS:
-- "Show me 404 errors from my backend API"
-- "What's the average response time for requests?"
-- "Check the app settings for my backend"
+- "Show me 404 errors from Azure Application Insights ai-copilot-demo"
+- "What's the average response time in Azure App Insights for rg-copilot-demo?"
+- "Check the Azure App Service app settings for app-backend-10084"
 
 ---
 
@@ -144,9 +144,9 @@ az sql db show --server sql-copilot-demo-10084 --name appdb --resource-group rg-
 *Shows: Basic edition, 2GB max, Online status*
 
 ### COPILOT PROMPTS:
-- "Show me DTU usage for my SQL database"
-- "List firewall rules for my SQL server"
-- "What's the database size and status?"
+- "Show me DTU usage for my Azure SQL database appdb in rg-copilot-demo"
+- "List firewall rules for my Azure SQL server sql-copilot-demo-10084"
+- "What's my Azure SQL database size and status?"
 
 ---
 
@@ -178,9 +178,9 @@ az appservice plan show --name asp-copilot-demo --resource-group rg-copilot-demo
 *Shows: B1 SKU with 1 worker*
 
 ### COPILOT PROMPTS:
-- "Compare app settings between frontend and backend"
-- "What version is deployed to each app?"
-- "Show me differences in configuration"
+- "Compare Azure App Service settings between app-frontend-10084 and app-backend-10084"
+- "What version is deployed to each Azure web app in rg-copilot-demo?"
+- "Show me configuration differences between my Azure App Services"
 
 ---
 
@@ -196,9 +196,9 @@ az monitor activity-log list --resource-group rg-copilot-demo --max-events 15 --
 *Shows: Restart, config updates, deployments with timestamps*
 
 ### COPILOT PROMPTS:
-- "Show me recent operations on my resource group"
-- "Who made changes to my web app?"
-- "When was my app last restarted?"
+- "Show me recent Azure activity log for resource group rg-copilot-demo"
+- "Who made changes to my Azure web app app-backend-10084?"
+- "When was my Azure App Service last restarted?"
 
 ---
 
