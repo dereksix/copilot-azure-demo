@@ -97,9 +97,10 @@ az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copi
 **Request summary by status:**
 ```powershell
 # Source environment config
-$config = Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object { $_.Split('=', 2) } | ForEach-Object { @{$_[0]=$_[1]} }
-$APP_INSIGHTS = ($config | Where-Object { $_.Keys -eq 'APP_INSIGHTS' }).APP_INSIGHTS
-$RESOURCE_GROUP = ($config | Where-Object { $_.Keys -eq 'RESOURCE_GROUP' }).RESOURCE_GROUP
+Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object {
+    $parts = $_ -split '=', 2
+    Set-Variable -Name $parts[0] -Value $parts[1]
+}
 
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | summarize count() by cloud_RoleName, resultCode | order by count_ desc" -o json 2>&1
@@ -116,9 +117,10 @@ if ($LASTEXITCODE -ne 0) {
 **Find 404 errors:**
 ```powershell
 # Source environment config
-$config = Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object { $_.Split('=', 2) } | ForEach-Object { @{$_[0]=$_[1]} }
-$APP_INSIGHTS = ($config | Where-Object { $_.Keys -eq 'APP_INSIGHTS' }).APP_INSIGHTS
-$RESOURCE_GROUP = ($config | Where-Object { $_.Keys -eq 'RESOURCE_GROUP' }).RESOURCE_GROUP
+Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object {
+    $parts = $_ -split '=', 2
+    Set-Variable -Name $parts[0] -Value $parts[1]
+}
 
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | where resultCode == '404' | project timestamp, url, duration | order by timestamp desc | take 10" -o json 2>&1
@@ -140,9 +142,10 @@ if ($LASTEXITCODE -ne 0) {
 **Average response times per app:**
 ```powershell
 # Source environment config
-$config = Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object { $_.Split('=', 2) } | ForEach-Object { @{$_[0]=$_[1]} }
-$APP_INSIGHTS = ($config | Where-Object { $_.Keys -eq 'APP_INSIGHTS' }).APP_INSIGHTS
-$RESOURCE_GROUP = ($config | Where-Object { $_.Keys -eq 'RESOURCE_GROUP' }).RESOURCE_GROUP
+Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object {
+    $parts = $_ -split '=', 2
+    Set-Variable -Name $parts[0] -Value $parts[1]
+}
 
 # Run query with error handling
 $result = az monitor app-insights query --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP --analytics-query "requests | summarize avgDuration=avg(duration), count=count() by cloud_RoleName | order by avgDuration desc" -o json 2>&1
@@ -262,12 +265,10 @@ az monitor activity-log list --resource-group rg-copilot-demo --max-events 15 --
 
 ```powershell
 # Source environment config first
-$config = Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object { $_.Split('=', 2) } | ForEach-Object { @{$_[0]=$_[1]} }
-$APP_INSIGHTS = ($config | Where-Object { $_.Keys -eq 'APP_INSIGHTS' }).APP_INSIGHTS
-$RESOURCE_GROUP = ($config | Where-Object { $_.Keys -eq 'RESOURCE_GROUP' }).RESOURCE_GROUP
-$BACKEND_APP = ($config | Where-Object { $_.Keys -eq 'BACKEND_APP' }).BACKEND_APP
-$SQL_SERVER = ($config | Where-Object { $_.Keys -eq 'SQL_SERVER' }).SQL_SERVER
-$SQL_DATABASE = ($config | Where-Object { $_.Keys -eq 'SQL_DATABASE' }).SQL_DATABASE
+Get-Content ./env-config.txt | Where-Object { $_ -match '=' -and $_ -notmatch '^#' } | ForEach-Object {
+    $parts = $_ -split '=', 2
+    Set-Variable -Name $parts[0] -Value $parts[1]
+}
 
 # Environment overview
 az resource list -g $RESOURCE_GROUP -o table
