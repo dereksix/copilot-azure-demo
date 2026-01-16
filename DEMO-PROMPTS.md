@@ -12,6 +12,7 @@
 - All commands use variables from `env-config.txt` instead of hardcoded names
 - Ensure you run commands from the repository root where `env-config.txt` exists
 - Variables are sourced at the start of each command block
+> **Note:** Commands below use `{SUFFIX}` as a placeholder. Replace it with your actual suffix value from `env-config.txt` (e.g., if your frontend app is `app-copilot-demo-frontend-12345`, use `12345` as the suffix).
 
 ---
 
