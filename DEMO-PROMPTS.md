@@ -189,7 +189,7 @@ az webapp config appsettings list --name $BACKEND_APP --resource-group $RESOURCE
 
 **App Service Plan info:**
 ```powershell
-az appservice plan show --name asp-copilot-demo --resource-group $RESOURCE_GROUP --query "{Name:name, SKU:sku.name, Workers:sku.capacity}" -o table
+az appservice plan show --name $APP_SERVICE_PLAN --resource-group $RESOURCE_GROUP --query "{Name:name, SKU:sku.name, Workers:sku.capacity}" -o table
 ```
 *Shows: B1 SKU with 1 worker*
 

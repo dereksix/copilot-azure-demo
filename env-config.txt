@@ -6,6 +6,9 @@
 # Resource Group
 RESOURCE_GROUP=rg-copilot-demo
 
+# App Service Plan
+APP_SERVICE_PLAN=asp-copilot-demo
+
 # Web Applications
 FRONTEND_APP=app-frontend-10084
 FRONTEND_URL=https://app-frontend-10084.azurewebsites.net
