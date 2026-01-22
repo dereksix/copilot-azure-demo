@@ -236,6 +236,16 @@ az monitor activity-log list -g rg-copilot-demo --max-events 10 -o table
 
 **What it shows:** The real power of AI - handling complex, multi-part requests in natural language
 
+> **💡 TIP:** These prompts work across ANY of your Azure resource groups and regions!  
+> Just describe what you want - Copilot will figure out the right resources.
+
+### YOUR AZURE ENVIRONMENT
+| Resource Group | Region | Purpose |
+|----------------|--------|---------|
+| `rg-copilot-demo` | East US | Demo 3-tier app |
+| `trader-gpu-rg` | South Central US | GPU VMs for trading |
+| `Networking` | East US 2 | Hub-spoke VPN infrastructure |
+
 ### THE "DROP THE MIC" MOMENTS
 
 Instead of asking 15 individual questions, try these comprehensive prompts that combine multiple operations:
@@ -244,83 +254,105 @@ Instead of asking 15 individual questions, try these comprehensive prompts that 
 
 ### 🔥 Full Environment Health Check
 ```
-Give me a complete health check of my Azure environment in rg-copilot-demo. 
-Check if all resources are running, show me any HTTP errors in the last hour, 
-compare the configuration between my frontend and backend apps, and tell me 
-if there are any obvious issues I should fix.
+Give me a complete health check of ALL my Azure resource groups.
+For each one, check if resources are running, show me any errors, 
+and tell me if there are any obvious issues I should fix.
+```
+
+**Or target specific environments:**
+```
+Give me a health check comparing my rg-copilot-demo (demo app) and 
+trader-gpu-rg (GPU workloads). Are all VMs and services running? 
+Any cost concerns I should know about?
 ```
 
 ---
 
 ### 🔥 Incident Response Mode
 ```
-I'm getting reports of errors in production. For my rg-copilot-demo environment:
-1. Check if all services are running
-2. Show me recent errors from Application Insights
-3. Check if there's a version mismatch between frontend and backend
-4. Look at the activity log for any recent changes that might have caused this
+I'm getting reports of errors in production. Check ALL my resource groups:
+1. Which services are running vs stopped across all my environments?
+2. Show me recent errors from any Application Insights
+3. Check for any version mismatches between frontend and backend apps
+4. Look at activity logs across all RGs for recent changes that might have caused this
 ```
 
 ---
 
 ### 🔥 Configuration Drift Analysis
 ```
-Analyze my Azure App Services app-frontend-89609 and app-backend-89609 for 
-configuration drift. Compare their app settings, show me any mismatches in 
-VERSION, LOG_LEVEL, CACHE_ENABLED, and FEATURE_FLAG settings, and explain 
-what problems these differences might cause.
+Analyze my Azure App Services for configuration drift. Compare settings 
+between my frontend and backend apps, show me any mismatches in VERSION, 
+LOG_LEVEL, CACHE_ENABLED, and FEATURE_FLAG settings, and explain what 
+problems these differences might cause.
+```
+
+---
+
+### 🔥 Multi-Region Infrastructure Check
+```
+I have resources in multiple Azure regions. Give me a status report:
+- East US: rg-copilot-demo (web apps, SQL)
+- South Central US: trader-gpu-rg (GPU VMs)  
+- East US 2: Networking (VPN gateway, hub-spoke)
+
+For each region, check if resources are healthy and show me any 
+cross-region connectivity or latency concerns.
 ```
 
 ---
 
 ### 🔥 Pre-Deployment Checklist  
 ```
-Before I deploy to production, give me a status report on rg-copilot-demo:
-- Are both web apps healthy and running?
+Before I deploy to production, give me a status report across my environments:
+- Are all web apps healthy and running?
 - What's the current database DTU usage?
+- Are my GPU VMs in trader-gpu-rg running or deallocated?
 - Show me the current versions deployed to each app
-- Are there any firewall rules I should review?
-- What were the last 5 changes made to this environment?
+- What were the last 5 changes made to any of my environments?
 ```
 
 ---
 
 ### 🔥 Cost & Performance Summary
 ```
-Give me a summary of my rg-copilot-demo resources including:
+Give me a cost and performance summary across ALL my Azure resource groups:
 - What tier/SKU is each resource using?
+- Which resources are the most expensive (especially those GPU VMs)?
 - Average response times for my web apps
-- Database utilization metrics
 - Any resources that might be over or under-provisioned
+- Are there any VMs running that should be stopped?
 ```
 
 ---
 
 ### 🔥 "2AM Pager Alert" Simulation
 ```
-My app is down and users are complaining. I need you to quickly:
-1. Check if my web apps and database in rg-copilot-demo are online
+My app is down and users are complaining. I need you to quickly check 
+ALL my Azure environments:
+1. Which web apps and databases are online vs offline?
 2. Look for any 500 errors or timeouts in the last 30 minutes
-3. Check if anyone made configuration changes recently
+3. Check if anyone made configuration changes recently (any RG)
 4. Compare frontend vs backend settings to find any mismatches
-5. Give me a summary of what might be wrong and what to fix first
+5. Check if my VPN connection in the Networking RG is still connected
+6. Give me a summary of what might be wrong and what to fix first
 ```
 
 ---
 
 ### 🔥 Executive Summary Report
 ```
-I need to brief leadership on the current state of our rg-copilot-demo environment.
-Generate a report that includes:
+I need to brief leadership on the current state of our Azure infrastructure.
+Generate a report covering ALL my resource groups:
 
-1. CURRENT STATUS: Are all services operational? Any outages?
-2. INCIDENTS: What errors or issues occurred in the last 24 hours?
-3. ROOT CAUSE: What configuration mismatches or problems did you find?
-4. IMPACT: How might these issues affect users?
-5. RECOMMENDED ACTIONS: What should we fix first, second, third?
+1. CURRENT STATUS: Are all services operational across all environments?
+2. COST SNAPSHOT: What's running and approximately how much is it costing?
+3. INCIDENTS: What errors or issues occurred in the last 24 hours?
+4. SECURITY: Any firewall rules or NSG concerns? VPN status?
+5. RECOMMENDED ACTIONS: What should we fix or optimize first?
 6. NEXT STEPS: What should the team do immediately vs this week?
 
-Format this as a professional incident report I can share with my manager.
+Format this as a professional report I can share with my manager.
 ```
 
 ---
@@ -328,12 +360,12 @@ Format this as a professional incident report I can share with my manager.
 ### 🔥 Change Management Summary
 ```
 Leadership wants to know what changed in our Azure environment this week.
-For rg-copilot-demo, generate a change summary report including:
+Across ALL my resource groups, generate a change summary report including:
 
-1. All configuration changes made to web apps
-2. Any deployments or restarts
+1. All configuration changes made to web apps and VMs
+2. Any deployments, restarts, or VM start/stop events
 3. Who made each change and when
-4. Current vs previous settings for VERSION, LOG_LEVEL, and FEATURE_FLAGS
+4. Any changes to networking (NSGs, firewall rules, VPN)
 5. Risk assessment: do any of these changes look problematic?
 6. Recommendations for rollback if needed
 ```
@@ -342,10 +374,10 @@ For rg-copilot-demo, generate a change summary report including:
 
 ### 🔥 Post-Incident Report Generator
 ```
-We just resolved an incident in rg-copilot-demo. Help me create a post-incident 
-report for leadership:
+We just resolved an incident. Help me create a post-incident report 
+for leadership covering all affected Azure resources:
 
-1. TIMELINE: What happened and when? (check activity logs)
+1. TIMELINE: What happened and when? (check activity logs across all RGs)
 2. DETECTION: How was the issue discovered?
 3. DIAGNOSIS: What did we find? (config mismatches, errors, etc.)
 4. RESOLUTION: What was fixed or needs to be fixed?
@@ -353,6 +385,19 @@ report for leadership:
 6. ACTION ITEMS: List specific tasks with owners and deadlines
 
 Include actual data from the environment to support each section.
+```
+
+---
+
+### 🔥 Cross-Environment Security Audit
+```
+Run a security check across all my Azure resource groups:
+1. Are there any NSG rules allowing traffic from 0.0.0.0/0 (open to internet)?
+2. Which VMs have public IPs assigned?
+3. What's the status of my VPN connection?
+4. Are SQL firewalls properly configured?
+5. Any resources missing recommended tags?
+6. Summarize security concerns by priority (critical, high, medium)
 ```
 
 ---
