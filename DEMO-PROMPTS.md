@@ -308,6 +308,55 @@ My app is down and users are complaining. I need you to quickly:
 
 ---
 
+### 🔥 Executive Summary Report
+```
+I need to brief leadership on the current state of our rg-copilot-demo environment.
+Generate a report that includes:
+
+1. CURRENT STATUS: Are all services operational? Any outages?
+2. INCIDENTS: What errors or issues occurred in the last 24 hours?
+3. ROOT CAUSE: What configuration mismatches or problems did you find?
+4. IMPACT: How might these issues affect users?
+5. RECOMMENDED ACTIONS: What should we fix first, second, third?
+6. NEXT STEPS: What should the team do immediately vs this week?
+
+Format this as a professional incident report I can share with my manager.
+```
+
+---
+
+### 🔥 Change Management Summary
+```
+Leadership wants to know what changed in our Azure environment this week.
+For rg-copilot-demo, generate a change summary report including:
+
+1. All configuration changes made to web apps
+2. Any deployments or restarts
+3. Who made each change and when
+4. Current vs previous settings for VERSION, LOG_LEVEL, and FEATURE_FLAGS
+5. Risk assessment: do any of these changes look problematic?
+6. Recommendations for rollback if needed
+```
+
+---
+
+### 🔥 Post-Incident Report Generator
+```
+We just resolved an incident in rg-copilot-demo. Help me create a post-incident 
+report for leadership:
+
+1. TIMELINE: What happened and when? (check activity logs)
+2. DETECTION: How was the issue discovered?
+3. DIAGNOSIS: What did we find? (config mismatches, errors, etc.)
+4. RESOLUTION: What was fixed or needs to be fixed?
+5. PREVENTION: What should we do to prevent this in the future?
+6. ACTION ITEMS: List specific tasks with owners and deadlines
+
+Include actual data from the environment to support each section.
+```
+
+---
+
 ### KEY TALKING POINT FOR AUDIENCE
 
 > "Notice how I didn't need to remember a single Azure CLI command, Kusto query syntax, 
