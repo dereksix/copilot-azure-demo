@@ -35,7 +35,7 @@ az webapp list --resource-group rg-copilot-demo --query "[].{Name:name, State:st
 
 **Check SQL server status:**
 ```powershell
-az sql server show --name sql-copilot-demo-10084 --resource-group rg-copilot-demo --query "{Name:name, FQDN:fullyQualifiedDomainName, State:state}" -o table
+az sql server show --name sql-copilot-demo-89609 --resource-group rg-copilot-demo --query "{Name:name, FQDN:fullyQualifiedDomainName, State:state}" -o table
 ```
 *Expected output: State = Ready*
 
@@ -53,7 +53,7 @@ az sql server show --name sql-copilot-demo-10084 --resource-group rg-copilot-dem
 
 **Stream live logs (interactive):**
 ```powershell
-az webapp log tail --name app-frontend-10084 --resource-group rg-copilot-demo
+az webapp log tail --name app-frontend-89609 --resource-group rg-copilot-demo
 ```
 *Shows: Real-time application logs*
 
@@ -66,12 +66,12 @@ az monitor activity-log list --resource-group rg-copilot-demo --max-events 10 --
 **Web app HTTP metrics:**
 ```powershell
 $subId = az account show --query id -o tsv
-az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copilot-demo/providers/Microsoft.Web/sites/app-frontend-10084" --metric "Requests" "Http2xx" "Http4xx" --interval PT5M -o table
+az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copilot-demo/providers/Microsoft.Web/sites/app-frontend-89609" --metric "Requests" "Http2xx" "Http4xx" --interval PT5M -o table
 ```
 *Shows: Request counts by status code*
 
 ### COPILOT PROMPTS:
-- "Stream live logs from my Azure App Service app-frontend-10084"
+- "Stream live logs from my Azure App Service app-frontend-89609"
 - "Show me HTTP errors from my Azure web app in rg-copilot-demo"
 - "What's the average response time for my Azure App Service?"
 
@@ -102,14 +102,14 @@ az monitor app-insights query --app ai-copilot-demo --resource-group rg-copilot-
 
 **Check app settings:**
 ```powershell
-az webapp config appsettings list --name app-backend-10084 --resource-group rg-copilot-demo --query "[].{Name:name, Value:value}" -o table
+az webapp config appsettings list --name app-backend-89609 --resource-group rg-copilot-demo --query "[].{Name:name, Value:value}" -o table
 ```
 *Shows: All configuration including LOG_LEVEL=DEBUG, VERSION=2.1.0*
 
 ### COPILOT PROMPTS:
 - "Show me 404 errors from Azure Application Insights ai-copilot-demo"
 - "What's the average response time in Azure App Insights for rg-copilot-demo?"
-- "Check the Azure App Service app settings for app-backend-10084"
+- "Check the Azure App Service app settings for app-backend-89609"
 
 ---
 
@@ -121,31 +121,31 @@ az webapp config appsettings list --name app-backend-10084 --resource-group rg-c
 **SQL DTU metrics:**
 ```powershell
 $subId = az account show --query id -o tsv
-az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-demo-10084/databases/appdb" --metric "dtu_consumption_percent" --interval PT5M -o table
+az monitor metrics list --resource "/subscriptions/$subId/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-demo-89609/databases/appdb" --metric "dtu_consumption_percent" --interval PT5M -o table
 ```
 *Shows: DTU percentage over time (usually 0-1% for idle)*
 
 **SQL Server info:**
 ```powershell
-az sql server show --name sql-copilot-demo-10084 --resource-group rg-copilot-demo --query "{Name:name, FQDN:fullyQualifiedDomainName, State:state, Admin:administrators.login}" -o table
+az sql server show --name sql-copilot-demo-89609 --resource-group rg-copilot-demo --query "{Name:name, FQDN:fullyQualifiedDomainName, State:state, Admin:administrators.login}" -o table
 ```
 *Shows: Server FQDN, Ready state, AD admin*
 
 **Firewall rules:**
 ```powershell
-az sql server firewall-rule list --server sql-copilot-demo-10084 --resource-group rg-copilot-demo -o table
+az sql server firewall-rule list --server sql-copilot-demo-89609 --resource-group rg-copilot-demo -o table
 ```
 *Shows: AllowAzureServices and AllowMyIP rules*
 
 **Database size/usage:**
 ```powershell
-az sql db show --server sql-copilot-demo-10084 --name appdb --resource-group rg-copilot-demo --query "{Name:name, Edition:edition, MaxSize:maxSizeBytes, Status:status}" -o table
+az sql db show --server sql-copilot-demo-89609 --name appdb --resource-group rg-copilot-demo --query "{Name:name, Edition:edition, MaxSize:maxSizeBytes, Status:status}" -o table
 ```
 *Shows: Basic edition, 2GB max, Online status*
 
 ### COPILOT PROMPTS:
 - "Show me DTU usage for my Azure SQL database appdb in rg-copilot-demo"
-- "List firewall rules for my Azure SQL server sql-copilot-demo-10084"
+- "List firewall rules for my Azure SQL server sql-copilot-demo-89609"
 - "What's my Azure SQL database size and status?"
 
 ---
@@ -158,10 +158,10 @@ az sql db show --server sql-copilot-demo-10084 --name appdb --resource-group rg-
 **Compare settings side-by-side:**
 ```powershell
 Write-Host "=== FRONTEND ===" -ForegroundColor Cyan
-az webapp config appsettings list --name app-frontend-10084 --resource-group rg-copilot-demo --query "[?name=='VERSION' || name=='LOG_LEVEL' || name=='CACHE_ENABLED' || name=='FEATURE_FLAG_V2'].{Name:name, Value:value}" -o table
+az webapp config appsettings list --name app-frontend-89609 --resource-group rg-copilot-demo --query "[?name=='VERSION' || name=='LOG_LEVEL' || name=='CACHE_ENABLED' || name=='FEATURE_FLAG_V2'].{Name:name, Value:value}" -o table
 
 Write-Host "`n=== BACKEND ===" -ForegroundColor Cyan  
-az webapp config appsettings list --name app-backend-10084 --resource-group rg-copilot-demo --query "[?name=='VERSION' || name=='LOG_LEVEL' || name=='CACHE_ENABLED' || name=='FEATURE_FLAG_V2'].{Name:name, Value:value}" -o table
+az webapp config appsettings list --name app-backend-89609 --resource-group rg-copilot-demo --query "[?name=='VERSION' || name=='LOG_LEVEL' || name=='CACHE_ENABLED' || name=='FEATURE_FLAG_V2'].{Name:name, Value:value}" -o table
 ```
 *Shows these differences:*
 | Setting | Frontend | Backend |
@@ -178,7 +178,7 @@ az appservice plan show --name asp-copilot-demo --resource-group rg-copilot-demo
 *Shows: B1 SKU with 1 worker*
 
 ### COPILOT PROMPTS:
-- "Compare Azure App Service settings between app-frontend-10084 and app-backend-10084"
+- "Compare Azure App Service settings between app-frontend-89609 and app-backend-89609"
 - "What version is deployed to each Azure web app in rg-copilot-demo?"
 - "Show me configuration differences between my Azure App Services"
 
@@ -197,7 +197,7 @@ az monitor activity-log list --resource-group rg-copilot-demo --max-events 15 --
 
 ### COPILOT PROMPTS:
 - "Show me recent Azure activity log for resource group rg-copilot-demo"
-- "Who made changes to my Azure web app app-backend-10084?"
+- "Who made changes to my Azure web app app-backend-89609?"
 - "When was my Azure App Service last restarted?"
 
 ---
@@ -212,7 +212,7 @@ az resource list -g rg-copilot-demo -o table
 az webapp list -g rg-copilot-demo --query "[].{Name:name,State:state}" -o table
 
 # Live logs
-az webapp log tail --name app-backend-10084 -g rg-copilot-demo
+az webapp log tail --name app-backend-89609 -g rg-copilot-demo
 
 # App Insights - errors
 az monitor app-insights query --app ai-copilot-demo -g rg-copilot-demo --analytics-query "requests | where resultCode != '200' | take 10"
@@ -221,14 +221,100 @@ az monitor app-insights query --app ai-copilot-demo -g rg-copilot-demo --analyti
 az monitor app-insights query --app ai-copilot-demo -g rg-copilot-demo --analytics-query "requests | summarize avg(duration) by cloud_RoleName"
 
 # SQL metrics
-az monitor metrics list --resource "/subscriptions/$(az account show --query id -o tsv)/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-demo-10084/databases/appdb" --metric "dtu_consumption_percent" -o table
+az monitor metrics list --resource "/subscriptions/$(az account show --query id -o tsv)/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-demo-89609/databases/appdb" --metric "dtu_consumption_percent" -o table
 
 # Config compare
-az webapp config appsettings list --name app-backend-10084 -g rg-copilot-demo -o table
+az webapp config appsettings list --name app-backend-89609 -g rg-copilot-demo -o table
 
 # Activity log
 az monitor activity-log list -g rg-copilot-demo --max-events 10 -o table
 ```
+
+---
+
+## 🚀 GRAND FINALE: ONE-SHOT COMPREHENSIVE QUERIES
+
+**What it shows:** The real power of AI - handling complex, multi-part requests in natural language
+
+### THE "DROP THE MIC" MOMENTS
+
+Instead of asking 15 individual questions, try these comprehensive prompts that combine multiple operations:
+
+---
+
+### 🔥 Full Environment Health Check
+```
+Give me a complete health check of my Azure environment in rg-copilot-demo. 
+Check if all resources are running, show me any HTTP errors in the last hour, 
+compare the configuration between my frontend and backend apps, and tell me 
+if there are any obvious issues I should fix.
+```
+
+---
+
+### 🔥 Incident Response Mode
+```
+I'm getting reports of errors in production. For my rg-copilot-demo environment:
+1. Check if all services are running
+2. Show me recent errors from Application Insights
+3. Check if there's a version mismatch between frontend and backend
+4. Look at the activity log for any recent changes that might have caused this
+```
+
+---
+
+### 🔥 Configuration Drift Analysis
+```
+Analyze my Azure App Services app-frontend-89609 and app-backend-89609 for 
+configuration drift. Compare their app settings, show me any mismatches in 
+VERSION, LOG_LEVEL, CACHE_ENABLED, and FEATURE_FLAG settings, and explain 
+what problems these differences might cause.
+```
+
+---
+
+### 🔥 Pre-Deployment Checklist  
+```
+Before I deploy to production, give me a status report on rg-copilot-demo:
+- Are both web apps healthy and running?
+- What's the current database DTU usage?
+- Show me the current versions deployed to each app
+- Are there any firewall rules I should review?
+- What were the last 5 changes made to this environment?
+```
+
+---
+
+### 🔥 Cost & Performance Summary
+```
+Give me a summary of my rg-copilot-demo resources including:
+- What tier/SKU is each resource using?
+- Average response times for my web apps
+- Database utilization metrics
+- Any resources that might be over or under-provisioned
+```
+
+---
+
+### 🔥 "2AM Pager Alert" Simulation
+```
+My app is down and users are complaining. I need you to quickly:
+1. Check if my web apps and database in rg-copilot-demo are online
+2. Look for any 500 errors or timeouts in the last 30 minutes
+3. Check if anyone made configuration changes recently
+4. Compare frontend vs backend settings to find any mismatches
+5. Give me a summary of what might be wrong and what to fix first
+```
+
+---
+
+### KEY TALKING POINT FOR AUDIENCE
+
+> "Notice how I didn't need to remember a single Azure CLI command, Kusto query syntax, 
+> or which portal blade to click. I just described what I needed in plain English, and 
+> Copilot figured out which 5-6 different Azure APIs to call, correlated the data, 
+> and gave me actionable insights. That's the difference between a command-line tool 
+> and an AI operations assistant."
 
 ---
 

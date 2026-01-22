@@ -12,10 +12,10 @@ param(
     [int]$LoopDelay = 10
 )
 
-$FRONTEND_URL = "https://app-frontend-10084.azurewebsites.net"
-$BACKEND_URL = "https://app-backend-10084.azurewebsites.net"
+$FRONTEND_URL = "https://app-frontend-89609.azurewebsites.net"
+$BACKEND_URL = "https://app-backend-89609.azurewebsites.net"
 $RESOURCE_GROUP = "rg-copilot-demo"
-$SQL_SERVER = "sql-copilot-demo-10084"
+$SQL_SERVER = "sql-copilot-demo-89609"
 $SQL_DB = "appdb"
 $APP_INSIGHTS = "ai-copilot-demo"
 
@@ -170,11 +170,11 @@ ORDER BY r.cpu_time DESC
     
     # Use az sql to run queries (requires Azure AD auth token)
     Write-Host "  Note: SQL uses Azure AD authentication" -ForegroundColor Gray
-    Write-Host "  Run this to connect: az sql db connect --name appdb --server sql-copilot-demo-10084" -ForegroundColor Cyan
+    Write-Host "  Run this to connect: az sql db connect --name appdb --server sql-copilot-89609" -ForegroundColor Cyan
     
     # Generate some activity by checking metrics
     Write-Host "  Fetching SQL metrics..." -ForegroundColor Gray
-    az monitor metrics list --resource "/subscriptions/34f82e2f-412d-4355-8c44-6e87749f4e37/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-demo-10084/databases/appdb" --metric "dtu_consumption_percent" --interval PT1M --output table 2>$null
+    az monitor metrics list --resource "/subscriptions/34f82e2f-412d-4355-8c44-6e87749f4e37/resourceGroups/rg-copilot-demo/providers/Microsoft.Sql/servers/sql-copilot-89609/databases/appdb" --metric "dtu_consumption_percent" --interval PT1M --output table 2>$null
     
     Write-Host "[SQL] Complete" -ForegroundColor Green
 }
@@ -214,7 +214,7 @@ function Generate-Logs {
     Write-Host "[LOGS] Complete - $count log entries generated" -ForegroundColor Green
     Write-Host ""
     Write-Host "View logs with:" -ForegroundColor Cyan
-    Write-Host "  az webapp log tail --name app-backend-10084 --resource-group rg-copilot-demo" -ForegroundColor White
+    Write-Host "  az webapp log tail --name app-backend-89609 --resource-group rg-copilot-demo" -ForegroundColor White
 }
 
 # Main execution

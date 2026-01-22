@@ -9,9 +9,9 @@ param(
 )
 
 $RESOURCE_GROUP = "rg-copilot-demo"
-$FRONTEND_APP = "app-frontend-10084"
-$BACKEND_APP = "app-backend-10084"
-$SQL_SERVER = "sql-copilot-demo-10084"
+$FRONTEND_APP = "app-frontend-89609"
+$BACKEND_APP = "app-backend-89609"
+$SQL_SERVER = "sql-copilot-demo-89609"
 $APP_INSIGHTS = "ai-copilot-demo"
 
 function Show-Menu {
